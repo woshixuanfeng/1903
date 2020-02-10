@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+    *{
+    	margin: 0px;
+    	padding:0px;
+    }
+    #app{
+    	height: 721px;
+    	background: rgba(0,0,0,0.5);
+    	position: relative;
+    }
+    .box{
+    	width: 350px;
+    	background: #fff;
+    	padding:20px;
+    	position: absolute;
+    	left: 50%;
+    	top: 50%;
+    	margin-left: -175px;
+    	margin-top: -100px;
+    }
+    	.titles{
+    		text-align: center;
+    		font-weight: 700;
+    	}
+    	.content{
+    		text-indent: 2em;
+    		line-height:2em;
+    	}
+    	.btn{
+    		padding:5px;
+    	}
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+</body>
+
+</html>
+<script type="text/babel">
+    class Alert extends React.Component{
+	constructor(props){
+	super(props)
+	this.state={
+	infos:true
+}
+	this.handlerAlert=this.handlerAlert.bind(this)
+	this.handlerPlay=this.handlerPlay.bind(this,event)
+}
+	handlerAlert(){
+	alert(this.props.children)
+}
+	handlerPlay(ev){
+	this.setState({
+	infos:!this.state.infos
+})
+}
+	render(){
+	return <div className="box" style={{display:this.state.infos?'block':'none'}}>
+				<div className="titles">{this.props.titles}</div>
+				<div className="content">{this.props.children}</div>
+				<div><button className="btn" onClick={this.handlerAlert}>确定</button>{this.props.info&&<button className="btn" style={{float:'right'}} onClick={this.handlerPlay}>取消</button>}</div>
+			</div>
+}
+}
+var t='这是标题'
+var c='是否弹窗是否弹窗是否弹窗是否弹窗是否弹窗是否弹窗'
+ReactDOM.render(<Alert titles={t} info={true}>{c}</Alert>,document.getElementById('app'))
+</script>
