@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+</body>
+<script type="text/babel">
+    // class Col extends React.Component{
+    //     constructor(props){
+	// 		super(props)
+    //     }
+    //     render(){
+    //         console.log(this.props.w);
+    //         var wNum=(this.props.w.slice(3) / 12 * 100) + "%";
+    //         console.log(wNum);
+            
+    //         return (<div style={{height:"40px",background:"red",float:"left",width:wNum}}></div>)
+    //     }
+    // }
+    // function Row(){
+    //     return (
+    //         <div style={{overflow:"hidden"}}>
+    //             <div col="10"></div>
+    //             <div col="2"></div>
+    //         </div>
+            
+    //     )
+    // }
+
+    class Col extends React.Component{
+        constructor(props){
+			super(props)
+        }
+        render(){
+            var wNum=(this.props.col / 12 * 100) + "%";
+            console.log(wNum);
+            
+            return (<div style={{height:"40px",background:"red",float:"left",width:wNum}}></div>)
+        }
+    }
+
+
+    class Row extends React.Component{
+        constructor(props){
+			super(props)
+        }
+        render(){
+            return (
+                <div>
+                    {React.Children.map(this.props.children,function(el){
+                        return el
+                    })}
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<Row><Col col="10"></Col><Col col="2"></Col></Row>,document.getElementById('app'))
+</script>
+
+</html>
