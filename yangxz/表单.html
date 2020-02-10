@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        //  ==》受控组件
+        {/* new App; */ }
+        class App extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    val1: '123',
+                    val2: '',
+                    val3: '',
+                    val4: '',
+                    val5: '',
+                    selectVal: 'b',
+                    radioVal: false,
+                    radioVal1: false
+                }
+                this.handlerChange = this.handlerChange.bind(this)
+                // this.handlerchange2 = this.handlerchange2.bind(this)
+            }
+            // this.setState()
+            handlerChange(ev) {
+                console.log(ev.target.checked);
+                this.setState({
+                    [ev.target.name]: ( ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value)
+                })
+            }
+            // var obj ={}
+            // var abc = 'hello'
+            // obj[abc] = 1
+            // obj.hello = 1
+            // setState(obj)  //对象的计算属性
+            componentDidMount() {
+                // document.getElementById('input');
+                // ref string定义refs（过时了，不推荐使用）
+                console.log(this.refs)
+                // 1： ref绑定在元素dom上返回的是：dom对象
+                // 2：绑定在组件上返回的是： 组件实例对象   ddd === this   ddd.setState() ddd.state ddd.methods
+            }
+            render() {
+                return (
+                    <div>
+                        <input id="input" type="text" ref="abc" defaultValue="hello" />
+                        {/* <App ref="ddd" /> */}
+
+
+                        <input name="val1" type="text" value={this.state.val1} onChange={this.handlerChange} />
+                        <input name="val3" type="text" value={this.state.val3} onChange={this.handlerChange} />
+                        <input name="val4" type="text" value={this.state.val4} onChange={this.handlerChange} />
+                        <input name="val5" type="text" value={this.state.val5} onChange={this.handlerChange} />
+                        <br />
+                        <textarea name="val2" value={this.state.val2} onChange={this.handlerChange}></textarea>
+
+                        <select name="selectVal" value={this.state.selectVal} onChange={this.handlerChange}>
+                            <option value="a">a</option>
+                            <option value="b">b</option>
+                            <option value="c">c</option>
+                        </select>
+                        // react 里不使用selected来选中默认值
+
+                        <input name="radioVal" checked={this.state.radioVal} onChange={this.handlerChange} type="checkbox" />1
+                        <input name="radioVal1" checked={this.state.radioVal1} onChange={this.handlerChange} type="radio" value="2" />2
+                        <input name="radioVal2" checked={this.state.radioVal2} onChange={this.handlerChange} type="radio" value="2" />2
+
+                        radio
+                        <button onClick={() => { console.log(this.state); }}>get</button>
+                    </div>
+                )
+            }
+        }
+        {/* radio受控组件 */ }
+
+        // class Radio extends React.Component {
+        //     constructor() {
+        //         super();
+        //         this.state = {
+        //             radioValue: 'b'
+        //         }
+        //         this.handlerChange = this.handlerChange.bind(this);
+        //     }
+        //     handlerChange(ev) {
+        //         this.setState({
+        //             radioValue: ev.target.value
+        //         })
+        //     }
+        //     render() {
+        //         return (
+        //             <div>
+        //                 {this.state.radioValue}
+        //                 <label>
+        //                     <input type="radio" name="abc" onChange={this.handlerChange} checked={this.state.radioValue === 'a'} value="a" />aaa
+        //                 </label>
+        //                 <label>
+        //                     <input type="radio" name="abc" onChange={this.handlerChange} checked={this.state.radioValue === 'b'} value="b" />bbb
+        //                 </label>
+        //             </div>
+        //         )
+        //     }
+        // }
+
+
+        ReactDOM.render(<App />, document.getElementById('app'))
+    </script>
+</body>
+
+</html>

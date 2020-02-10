@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        *{
+            margin: 0;padding: 0;list-style: none;text-decoration: none;
+        }
+        .max{
+            width: 500px;
+            margin:  0 auto;
+        }
+        .name{
+            font-size: 28px;
+            color: #ccffff;
+            text-shadow:2px 2px 2px black;
+            margin-bottom: 20px;
+        }
+        input{
+            width: 300px;
+            height: 30px;
+            border: 2px solid seagreen;
+            text-align: center;
+        }
+        button{
+            width: 120px;
+            height:30px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 30px;
+            color: #000;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        class App extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                }
+                this.handlerChange = this.handlerChange.bind(this)
+            }
+            handlerChange(ev) {
+                // console.log(ev.target.checked);
+                this.setState({
+                    [ev.target.name]: ( ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value)
+                })
+            }
+           
+            render() {
+                return (
+                    <div>
+                        <div className='name'>{this.props.props}</div>
+                        <input name="val3" type="text" value={this.state.val3} onChange={this.handlerChange} />
+                        <button onClick={() => { console.log(this.state); }}>提交</button>
+                        
+                    </div>
+                )
+            }
+        }
+        
+
+
+        ReactDOM.render(<App props='标题max'/>,document.getElementById('app'))
+    </script>
+</body>
+</html>
