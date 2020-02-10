@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<style>
+	.div1{
+		height:80px;
+		background-color: #000;
+		border:3px solid #ccc;
+		float:left;
+		box-sizing: border-box;
+		margin-bottom: 30px;
+	}
+	.div2{
+		height:80px;
+		background-color: green;
+		border:3px solid #000;
+		float:left;
+		box-sizing: border-box;
+		margin-bottom: 30px;
+
+	}
+	.div3{
+		height:80px;
+		background-color: orange;
+		border:3px solid pink;
+		float:left;
+		box-sizing: border-box;
+		margin-bottom: 30px;
+
+	}
+</style>
+<body>
+	<div id="app">
+		
+	</div>
+</body>
+</html>
+<script type="text/babel">
+	class App extends React.Component{
+	constructor(){
+		super()
+		this.state={
+			
+		}
+	}
+	render(props){
+		var num=[]
+	for(var i=1;i<=this.props.sizeA;i++){
+
+	 num.push(<div key={i} className="div1"  style={{width:100/this.props.sizeA+'%'}}>{i}</div>)
+}	
+	var num1=[]
+	for(var i=1;i<=this.props.sizeB;i++){
+
+	 num.push(<div key={i} className="div2"  style={{width:100/this.props.sizeB+'%'}}>{i}</div>)
+}
+var num2=[]
+	for(var i=1;i<=this.props.sizeC;i++){
+	 num.push(<div key={i} className="div3"  style={{width:100/this.props.sizeC+'%'}}>{i}</div>)
+}
+	return (
+		<div>
+			<div>{num}</div>
+			<div>{num1}</div>
+			<div>{num2}</div>
+
+		</div>
+	)
+	}
+}
+ReactDOM.render(<App sizeA="8" sizeB="4" sizeC="5"/>,document.getElementById('app'))
+
+</script>
