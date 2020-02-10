@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        *{margin:0;padding: 0;}
+    </style>
+</head>
+<body>
+	<div id="app"></div>
+    <script type="text/babel">
+        class Col extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={
+                    
+                }
+            }
+            render(props){
+                var num=(this.props.col / 12 * 100) + "%";
+                return (
+                    <div style={{width:num,height:'50px',border:'1px solid black',boxSizing:'border-box',float:'left'}}>
+                        
+                    </div>
+                )
+            }
+        }
+        class Row extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={
+                    
+                }
+            }
+            render(props){
+                var numr=this.props.row;
+                var num2=this.props.row*50+'px'
+                return (
+                    <div style={{width:numr,height:num2}}>
+                        {
+                            React.Children.map(this.props.children,function(el){
+                                return React.cloneElement(el)
+                            })
+                        }
+                    </div>
+
+                )
+            }
+        }
+        function App(){
+            return (
+                <Row row='2'>
+                    <Col col="4"></Col>
+                    <Col col="5"></Col>
+                    <Col col="3"></Col>
+                </Row>
+            )
+        }
+        ReactDOM.render(<App/>,document.getElementById('app'))
+
+    </script>
+</body>
+</html>
