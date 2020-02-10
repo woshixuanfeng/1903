@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+    *{
+    	margin:0px;
+    	padding:0px; 
+    }
+    	.col{
+    		height: 20px ;
+    		background:#ccc;
+    		margin:0px 10px;
+    		display: inline-block;
+    	}
+    	.row{
+    		height: 30px;
+			
+    	}
+    </style>
+</head>
+
+<body>
+	<div id="app">
+		
+	</div>
+</body>
+
+</html>
+<script type="text/babel">
+	class Row extends React.Component{
+	constructor(props){
+	super(props)
+}
+	render(){
+	return <div>
+				{React.Children.map(this.props.children,function(el){
+                                return el
+                            })}
+		   </div>
+}
+} 	
+	class Col extends React.Component{
+	constructor(props){
+	super(props)
+
+}
+	render(){
+	return <div style={{width:(this.props.col)/12*100+'%'}} className="col">
+				
+		   </div>
+}
+}	
+
+
+
+ReactDOM.render(<Row><Col col="5"></Col><Col col="3"></Col><Col col="3"></Col></Row>,document.getElementById('app'))
+</script>
