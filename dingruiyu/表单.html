@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+	    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	</head>
+	<body>
+		<div id="app"></div>
+	</body>
+	<script type="text/babel">
+		{/*new App;*/}
+		class App extends React.Component{
+			constructor(props){
+				super(props)
+				this.state={
+					 val1: '123',
+                    val2: '',
+                    val3: '',
+                    val4: '',
+                    val5: '',
+                    selectVal: 'b',
+                    radioVal: false,
+                    radioVal1: false
+				}
+				this.handlerChange=this.handlerChang.bind(this)
+			}
+			handlerChang(ev){
+				console.log(ev.target.checked);
+				this.setState({
+					[ev.target.name]:(ev.target.type==='checkbox'?ev.target.checked:ev.target.value)
+				})
+			}
+			componentDidMount(){
+				console.log(this.refs)
+			}
+			render(){
+				return(
+					<div>
+					    <input id="input" type="text" ref="abc" defaultValue="hello">
+					    {/*<App ref="ddd">*/}
+					    
+					    <input name="val1" type="text" value={this.state.val1} onChange={this.handlerChange}>
+					    <input name="val3" type="text" value={this.state.val3} onChange={this.handlerChange}>
+					    <input name="val4" type="text" value={this.state.val4} onChange={this.handlerChange}>
+					    <input name="val5" type="text" value={this.state.val5} onChange={this.handlerChange}>
+					    <br />
+					    <textarea name="val2" value={this.state.val2} onChange={this.handlerChange}></textarea>
+					    
+					    <select name="selectVal" value={this.state.selectVal} onChange={this.handlerChange}>
+					        <option value="a">a</option>
+					        <option value="b">b</option>
+					        <option value="c">c</option>
+					    </select>
+					    
+					    <input name="radioVal" checked={this.state.radioVal} onChange={this.handlerChange} type="checkbox" />1
+                        <input name="radioVal1" checked={this.state.radioVal1} onChange={this.handlerChange} type="radio" value="2" />2
+                        <input name="radioVal2" checked={this.state.radioVal2} onChange={this.handlerChange} type="radio" value="2" />2
+                        
+                        radio
+                        <button onClick={()=>{console.log(this.state);}}>get</button>
+					</div>
+				)
+			}
+		}
+		 {/* radio受控组件 */ }
+		 class Radio extends React.Component{
+		 	constructor(){
+		 		super();
+		 		this.state={
+		 			radioValue;'b'
+		 		}
+		 		this.handlerChange = this.handlerChange.bind(this);
+		 	}
+		 	 handlerChange(ev){
+		 	 	this.setState({
+		 	 		 radioValue:ev.target.value
+		 	 	})
+		 	 }
+		 	 render(){
+		 	 	return(
+		 	 		<div>
+		 	 		    {this.state.radioValue}
+		 	 		    <label>
+		 	 		        <input type="radio" name="abc" onChange={this.handlerChange} checked={this.state.radioValue === 'a'} value="a" />aaa
+		 	 		    </label>
+		 	 		    <label>
+		 	 		        <input type="radio" name="abc" onChange={this.handlerChange} checked={this.state.radioValue === 'b'} value="b" />bbb
+		 	 		    </label>
+		 	 		</div>
+		 	 	)
+		 	 }
+		 }
+		 ReactDOM.render(<Radio />, document.getElementById('app')) 
+	</script>
+</html>
