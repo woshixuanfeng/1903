@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>下拉框</title>
+    <style>
+        .select-box {
+            position: relative;
+            width: 200px;
+        }
+        
+        .select-input {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 100%;
+            line-height: 40px;
+            border-radius: 4px;
+            border: 1px solid #000;
+            position: relative;
+            height: 40px;
+            padding: 0 10px;
+        }
+        
+        .select-input::after {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #999;
+            right: 10px;
+            top: 10px;
+            content: "v";
+            text-align: center;
+            line-height: 20px;
+        }
+        
+        .select-options {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            right: 0;
+            min-height: 100px;
+            background-color: #fff;
+            top: 45px;
+            border: 1px solid #ccc;
+        }
+        
+        .select-options>p {
+            line-height: 40px;
+            height: 40px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            margin: 0;
+            margin-top: -1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        class App extends React.Component { constructor(props) { super(props); this.state = { isDropdown: false, value: "" }; this.switchDropdown = this.switchDropdown.bind(this); this.getVal = this.getVal.bind(this); } switchDropdown() { this.setState({ isDropdown:
+        !this.state.isDropdown }); } getVal(val) { console.log(val); this.setState( { value: val }, function() { this.switchDropdown(); } ); } render() { return (
+        <div className="select-box">
+            <div className="select-input" onClick={this.switchDropdown}>
+                <div className="text">{this.state.value}</div>
+            </div>
+            {this.state.isDropdown && (
+            <div className="select-options animated fadeInDown">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </div>
+            )}
+        </div>
+        ); } } function Option(props) { function handlerClick(val) { props.onChange(val); } return (
+        <p onClick={()=> { handlerClick(props.value); }} > {props.children}
+        </p>
+        ); } ReactDOM.render(
+
+        <App />, document.getElementById("app"));
+    </script>
+</body>
+
+</html>
