@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/daneden/animate.css/master/animate.css">
+
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        function Row(props) {
+            return (
+                <div className="bc-row">
+                    {
+                        React.Children.map(props.children, function (el, index) {
+                            return React.cloneElement(el, { gutter: props.gutter })
+                        })
+                    }
+                </div>
+            )
+        }
+        function Col(props) {
+            var apanName = proprs.span ? 'bc-col-' + props.span : '';
+            var gutter = props.gutter ? props.gutter / 2 : 8;
+            return (
+                <div className={"bc-col" + apanName} style={{ padding: '0' + gutter + 'px' }}>
+                    {props.children}
+                </div>
+            )
+        }
+
+
+
+        //2.对话框
+        class Dialog extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    isShow: props.visible
+                }
+                this.closeDialog = this.closeDialog.bind(this)
+                this.confirmDialog = this.confirmDialog.bind(this)
+            }
+            componentDidUpdate(prevProps, prevState) {
+                if (prevProps.visible != this.props.visible) {
+                    this.setState({
+                        isShow: this.props.visible
+                    })
+                }
+
+                console.log('update');
+
+            }
+            closeDialog() {
+                this.setState({
+                    isShow: false
+                })
+            }
+            confirmDialog() {
+                this.setState({
+                    isShow: false
+                }, function () {
+                    this.props.onConfirm()
+                })
+            }
+            render() {
+                return (
+                    !this.state.isShow ? null :
+                        <div className="dialog-area">
+                            <p className="title">
+                                {this.props.title}
+                            </p>
+                            <div className="content">
+                                {this.props.children}
+                            </div>
+                            <div className="footer">
+                                <Row>
+                                    {
+                                        this.props.isShowCancel ?
+                                            <React.Fragment>
+                                                <Col span={6}>
+                                                    <button onClick={this.closeDialog}>取消</button>
+                                                </Col>
+                                                <Col span={6}>
+                                                    <button onClick={this.confirmDialog}>确定</button>
+                                                </Col>
+                                            </React.Fragment>
+                                            :
+                                            <Col span={12}>
+                                                <button onClick={this.confirmDialog}>确定</button>
+                                            </Col>
+                                    }
+                                </Row>
+                            </div>
+                        </div>
+                )
+            }
+        }
+
+
+        // 3.下拉框组件
+
+        class Select extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    isDropdown: false,
+                    value: ''
+                }
+                this.switchDropdown = this.switchDropdown.bind(this)
+                this.getVal = this.getVal.bind(this);
+            }
+            switchDropdown() {
+                this.setState({
+                    isDropdown: !this.state.isDropdown
+                })
+            }
+            getVal(val) {
+                console.log(val);
+                this.setState({
+                    value: val
+                }, function () {
+                    this.switchDropdown()
+                })
+            }
+            render() {
+                return (
+                    <div className="select-box">
+                        <div className="select-input" onClick={this.switchDropdown}>
+                            <div className="text">{this.state.value}</div>
+                        </div>
+                        {
+                            this.state.isDropdown &&
+                            <div className="select-options animated fadeInDown">
+                                {
+                                    React.Children.map(this.props.children, (el, index) => {
+                                        // el ==== <option value="jack">jack</option>
+                                        return (
+                                            // 复制一份options,且实现onchange方法属性*
+                                            React.cloneElement(el, {
+                                                onChange: this.getVal
+                                            })
+                                        )
+                                    })
+                                }
+                            </div>
+                        }
+
+                    </div>
+                )
+            }
+        }
+
+        function Option(props){
+            function handlerClick(val){
+                props.onChange(val)
+            }
+            return(
+                <p onClick={()=>{handlerClick(props.value)}}>{props.children}</p>
+            )
+        }
+
+        class App extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={
+                    visible:false
+                }
+            }
+            render(){
+                return(
+                    <Row gutter={20}>
+                        <Col span={3}>
+                            <div style={{backgroundColor:'red'}}>title</div>
+                            <button onClick={()=>{this.setState({visible:true})}}>打开</button>
+                        </Col>
+                        <Col span={7}>
+                            <Select>
+                                <Option value="jsck">jsck</Option>
+                                <Option value="lucy">lucy</Option>
+                                <Option value="disabled">disabled</Option>
+                            </Select>
+                        </Col>
+                        <Col span={2}>
+                            <Dialog
+                                visible={this.state.visible}
+                                title="确认删除"
+                                isShowCancel={true}
+                                onConfirm={()=>{console.log('数据已删除');this.setState({visible:false})}}
+                            >是否删除数据？
+                            </Dialog>
+                        </Col>
+                    </Row>
+                )
+            }
+        }
+
+        ReactDOM.render(<APP/>,document.getElementById('app'))
+
+    </script>
+</body>
+
+</html>
