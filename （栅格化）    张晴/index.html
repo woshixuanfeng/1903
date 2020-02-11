@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<title>栅格化</title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		<style>
+			*{
+					margin:0;
+					padding:0;
+					list-style: none;
+				}
+				div{
+					background: #FFA500;
+				}
+			</style>
+	</head>
+	<body>
+		<div id="box">
+
+		</div>
+		<script type="text/babel">
+			class Col extends React.Component{
+					constructor(props){
+						super(props)
+						this.state={
+						}
+					}
+					render(props){
+						var num=(this.props.col / 12 * 100) + "%";
+						return (
+							<div style={{width:'300px',height:'50px',float:'left',border:'2px solid #000',boxSizing:'border-box'}}>,
+							
+							</div>
+							
+						)
+					}
+				}
+				class Row extends React.Component{
+					constructor(props){
+						super(props)
+						this.state={   
+						}
+					}
+					render(props){
+						var numr=this.props.row;
+						var num2=this.props.row*50+'px'
+						return (
+							<div style={{width:numr,height:num2}}>
+								{
+									React.Children.map(this.props.children,function(el){
+										return React.cloneElement(el)
+									})
+								}
+							</div>
+						)
+					}
+				}
+				function App(){
+					return (
+						<Row row='2'>
+							<Col col="4"></Col>
+							<Col col="5"></Col>
+							<Col col="6"></Col>
+							<Col col="7"></Col>
+							<Col col="8"></Col>
+							<Col col="9"></Col>
+							<Col col="10"></Col>
+							<Col col="11"></Col>
+							<Col col="12"></Col>
+							<Col col="13"></Col>
+						</Row>
+					)
+				}
+				ReactDOM.render(<App/>,document.getElementById('box'))
+			</script>
+	</body>
+</html>
