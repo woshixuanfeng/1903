@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.boxes-box{
+				position: relative;
+				padding-left:6px;
+			}
+			.boxes-input {
+				box-sizing: border-box;
+				display: inline-block;
+				width: 100%;
+				line-height: 40px;
+				border-radius: 4px;
+				border: 1px solid #000;
+				position: relative;
+				height: 40px;
+				padding: 0 10px;
+			}
+			.boxes-input-number{
+				content: '';
+				display: inline-block;
+				position: absolute;
+				width: 20px;
+				height: 20px;
+				background-image: url(http://pic.51yuansu.com/pic2/cover/00/34/84/5811822347f5a_610.jpg);
+				background-size: 100% 100%;
+				right: 10px;
+				top: 10px;
+			}
+			.boxes-digit{
+				position: absolute;
+				width: 100%;
+				left: 0;
+				right: 0;
+				min-height: 100px;
+				background-color: #fff;
+				top: 45px;
+				border: 1px solid #ccc;
+			}
+			.boxes-digit>p {
+				line-height: 40px;
+				height: 40px;
+				border-top: 1px solid #ccc;
+				text-align: center;
+				margin: 0;
+				margin-top: -1px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="gaine">
+
+		</div>
+	</body>
+	<script type="text/babel">
+		class Select extends React.Component{
+		    constructor(props){
+		        super(props);
+		        this.state={
+		            isDropdown:false,
+		            value:'',
+					icn:true
+		        }
+		        this.switchDropdown = this.switchDropdown.bind(this)
+		        this.getVal = this.getVal.bind(this);
+		    }
+		    switchDropdown(){
+		        this.setState({
+		            isDropdown:!this.state.isDropdown,
+					icn:!this.state.icn
+		        })
+		    }
+		    getVal(val){
+		        console.log(val);
+		        this.setState({
+		            value: val
+		        },function(){
+		            this.switchDropdown()
+		        })
+		    }
+		    render(){
+		        return(
+		            <div className="boxes-box" style={{width: this.props.width||'200px'}}>
+		                <div className="boxes-input" onClick={this.switchDropdown}>
+							<div className="boxes-input-number" style={{transform:this.state.icn==true?'rotate(0deg)':'rotate(180deg)'}}></div>
+		                    <div className="text">{this.state.value}</div>
+		                </div>
+		                {
+		                    this.state.isDropdown &&
+		                    <div className="boxes-digit animated fadeInDown">
+		                        {
+		                            React.Children.map(this.props.children,(el,index)=>{
+		                                // el ==== <option value="jack">jack</option>
+		                                return (
+		                                    React.cloneElement(el,{
+		                                        onChange:this.getVal
+		                                    })
+		                                )
+		                            })
+		                        }
+		                    </div>
+		                }
+		            </div>
+		        )
+		    }
+		}
+		function Option(props){
+		    function handlerClick(val){
+		        props.disabled?'':props.onChange(val)
+		    }
+		    return(
+		        <p style={{cursor:props.disabled?'no-drop':''}} onClick={()=>{handlerClick(props.value)}}>{props.children}</p>
+		    )
+		}
+		ReactDOM.render(<Select width="100px">
+                  <Option value="jack">jack</Option>
+                  <Option value='lucy'>lucy</Option>
+				<Option disabled value="disabled">disabled</Option>
+              </Select>,document.getElementById('gaine'))
+	</script>
+</html>
