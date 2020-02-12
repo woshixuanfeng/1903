@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style type="text/css">
+        .select-box {
+            position: relative;
+            width: 200px;
+        }
+        
+        * {
+            user-select: none;
+        }
+        
+        .select-input {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 100%;
+            line-height: 40px;
+            border-radius: 4px;
+            border: 1px solid #000;
+            position: relative;
+            height: 40px;
+            padding: 0 10px;
+        }
+        
+        .x {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -7.5px;
+            width: 0;
+            height: 0;
+            border: 15px solid #000;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-bottom: none;
+        }
+        
+        .t {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -7.5px;
+            width: 0;
+            height: 0;
+            border: 15px solid #000;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-top: none;
+        }
+        
+        .select-options {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            right: 0;
+            min-height: 100px;
+            background-color: #fff;
+            top: 45px;
+            border: 1px solid #ccc;
+        }
+        
+        .select-options>p {
+            line-height: 40px;
+            height: 40px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            /* padding: 0; */
+            margin: 0;
+            margin-top: -1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+</body>
+
+</html>
+<script type="text/babel">
+    class Select extends React.Component{ constructor(props){ super(props); this.state={ isDropdown:false, value:'' } this.switchDropdown = this.switchDropdown.bind(this) this.getVal = this.getVal.bind(this); } switchDropdown(){ this.setState({ isDropdown:!this.state.isDropdown
+    }) } getVal(val){ this.setState({ value: val },function(){ this.switchDropdown() }) } render(){ return(
+    <div className="select-box" style={{width:this.props.Width|| '200px'}}>
+        <div className={this.state.isDropdown? 'x': 't'}></div>
+        <div className="select-input" onClick={this.switchDropdown}>
+            <div className="text">{this.state.value||this.props.defaultValue}</div>
+        </div>
+        { this.state.isDropdown &&
+        <div className="select-options animated fadeInDown">
+            { React.Children.map(this.props.children,(el,index)=>{ return ( React.cloneElement(el,{ onChange:this.getVal }) ) }) }
+        </div>
+        }
+
+    </div>
+    ) } } class Option extends React.Component{ constructor(props){ super(props) this.handlerClick=this.handlerClick.bind(this) } handlerClick(val){ if(this.props.disabled!=false){ this.props.onChange(val) } } render(){ return(
+    <p onClick={()=>{this.handlerClick(this.props.value)}} style={{cursor:this.props.disabled==false&&'not-allowed'}}>{this.props.children}</p>
+    ) } } ReactDOM.render(
+
+    <Select defaultValue="lucy" Width="300px">
+                                <Option value="jack">jack</Option>
+                                <Option value='lucy'>lucy</Option>
+                                <Option disabled={false} value="disabled">disabled</Option>
+                        </Select>,document.getElementById('app'))
+</script>
