@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        .box {
+            height: 100px;
+            width: 100px;
+            border: solid 1px;
+            border-radius: 50%;
+            background-image: url('https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4135477902,3355939884&fm=26&gp=0.jpg');
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    
+    <script type="text/babel">
+        class App extends React.Component{
+            constructor() {
+                super()
+                this.state = {
+                    needX: 0,
+                    needY: 0
+                }
+                this.disX = 0;
+                this.disY = 0;
+            }
+            render() {
+                return <div className="box" style={{left:this.state.needX,top:this.state.needY}}
+                    onMouseDown = {this.fnDown.bind(this)}
+                    onMouseUp = {this.fnUp.bind(this)}
+                ></div>
+            }
+            fnDown(e) {
+                this.disX = e.clientX - e.target.offsetLeft;
+                this.disY = e.clientY - e.target.offsetTop;
+                document.onmousemove = this.fnMove.bind(this)
+            }
+            fnMove(e) {
+                this.setState({
+                    needX: e.clientX - this.disX,
+                    needY: e.clientY - this.disY
+                })
+            }
+            fnUp() {
+                document.onmousemove = null
+            }
+        }     
+        ReactDOM.render(<App/>,document.getElementById('app'))
+    </script>
+</body>
+</html>
