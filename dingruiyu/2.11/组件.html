@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		<style>
+			 *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .bc-row{
+            position: relative;
+            height: auto;
+            margin-right: 0;
+            margin-left: 0;
+            zoom: 1;
+            display: block;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .bc-col{
+           float: left; 
+           margin: 0;
+           min-height: 20px;
+           background-color: #ccc;
+           box-sizing: border-box;
+        }
+        /* 12 */
+        .bc-col-1{
+            width: 8.333333%;
+        }
+        .bc-col-2{
+            width: 16.666667%;
+        }
+        .bc-col-3{
+            width: 25%;
+        }
+        .bc-col-4{
+            width: 33.333333%;
+        }
+        .bc-col-5{
+            width: 41.666667%;
+        }.bc-col-6{
+            width: 50%;
+        }.bc-col-7{
+            width: 58.333333%;
+        }.bc-col-8{
+            width: 66.666667%;
+        }.bc-col-9{
+            width: 75%;
+        }.bc-col-10{
+            width: 83.333333%;
+        }.bc-col-11{
+            width: 91.666667%;
+        }.bc-col-12{
+            width: 100%;
+        }
+        /* dialog */
+        .dialog-area{
+            position: fixed;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .6);
+        }
+        .dialog-area>.dialog-box{
+            display: inline-block;
+            width: 400px;
+            height: 300px;
+            margin: 50% auto;
+            position: absolute;
+            left: 0;
+            transform: translateY(-200px);
+            background-color: #fff;
+            right: 0;
+        }
+        .dialog-box .title{
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+        }
+        .dialog-box .content{
+            text-align: center;
+            height: 210px;
+            line-height: 210px;
+        }
+        .dialog-box .footer{
+            height: 40px;
+            text-align: center;
+        }
+
+        /* select */
+        .select-box{
+            position: relative;
+            width: 200px;
+        }
+        .select-input{
+            box-sizing: border-box;
+
+            display: inline-block;
+            width: 100%;
+            line-height: 40px;
+            border-radius: 4px;
+            border: 1px solid #000;
+            position: relative;
+            height: 40px;
+            padding: 0 10px;
+        }
+        .select-input::after{
+            content: '';
+            display: inline-block;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            right: 10px;
+            top: 10px;
+        }
+        .select-options{
+            position: absolute;
+            width: 100%;
+            left: 0;
+            right: 0;
+            min-height: 100px;
+            background-color: #fff;
+            top:45px;
+            border: 1px solid #ccc;
+        }
+        .select-options>p{
+            line-height: 40px;
+            height: 40px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            /* padding: 0; */
+            margin: 0;
+            margin-top: -1px;
+        }
+		</style>
+	</head>
+	<body>
+		 <div id="app"></div>
+	</body>
+	<script type="text/babel">
+//		封装删个组件
+		function Row(props){
+			return(
+				<div className="ba-row">
+				    {
+				    	React.Children.map(props.children,function(el,index){
+				    		return.React.cloneElement(el,{gutter:props.gutter})
+				    	})
+				    }
+				</div>
+			)
+		}
+		function Col(props){
+			var apanName=props.span?'bc-col-'+props.span:'';
+			var gutter=props.gutter?props.gutter/2:8;
+			return(
+				<div className={"bc-col"+apanName} style={{padding:'0'+gutter+'px'}}>
+				    {props.children}
+				</div>
+			)
+		}
+//		对话框
+	class Dialog extends React.component{
+		constructor(props){
+			super(props){
+				this.state={
+					isShow:props.visible
+				}
+				this.closeDialog=this.closeDialog.bind(this)
+				this.confirmDialog=this.confirmDialog.bind(this)
+			}
+			componentDidUpdate(prevProps,prevState){
+				if(prevProps.visible!=this.props.visible){
+					this.setState({
+						isShow:this.props.visible
+					})
+				}
+				console.log('update');
+			}
+			closeDialog(){
+				this.setState({
+					isShow:false
+				})
+			}
+			confirmDialog(){
+				this.setState({
+					isShow:false
+				},function(){
+					this.props.onConfirm()
+				}
+				)
+			}
+			render(){
+				return(
+					!this.state.isShow?null:
+					<div className="dialog-area">
+					    <div className="dialog-box">
+					        <p className="title">
+					           {this.props.children}
+					        </p>
+					        <div className="content">{this.props.children}</div>
+					        <div className="footer">
+					            <Row>
+					                {
+					                	this.props.isShowCancel?
+					                	<React.Fragment>
+					                	   <Col span={6}>
+					                	       <button onClick={this.closeDialog}>取消</button>
+					                	   </Col>
+					                	   <Col span={6}>
+                                            <button onClick={this.confirmDialog}>确定</button>
+                                           </Col>
+                                        </React.Fragment>:
+                                        <Col span={12}>
+                                            <button onClick={this.confirmDialog}>确定</button>
+                                        </Col>
+					                }
+					            </Row>
+					        </div>
+					    </div>
+					</div>
+				)
+			}
+		}
+	}
+//	下拉框组件
+	class Select extends React.Component{
+		constructor(props){
+			super(props);
+			this.state={
+				isDropdown:false,
+                value:''
+			}
+			this.switchDropdown=this.switchDropdown.bind(this)
+			this.getVal=this.getVal.bind(this);
+		}
+		switchDropdown(){
+			this.setState({
+				isDropdown:!this.state.isDropdown
+			})
+		}
+		getVal(val){
+			console.log(val);
+			this.setState({
+				value:val
+			},function(){
+				this.switchDropdown()
+			}
+			)
+		}
+		render(){
+			return(
+				<div className="select-box">
+                        <div className="select-input" onClick={this.switchDropdown}>
+                            <div className="text">{this.state.value}</div>
+                        </div>
+                        {
+                            this.state.isDropdown &&
+                            <div className="select-options animated fadeInDown">
+                                {
+                                    React.Children.map(this.props.children,(el,index)=>{
+                                        return (
+                                            // 复制一份options,且实现onchange方法属性
+                                            React.cloneElement(el,{
+                                                onChange:this.getVal
+                                            })
+                                        )
+                                    })
+                                }
+                            </div>
+                        }
+                        
+                    </div>
+			)
+		}
+	}
+	function Option(props){
+            function handlerClick(val){
+                props.onChange(val)
+            }
+            return(
+                <p onClick={()=>{handlerClick(props.value)}}>{props.children}</p>
+            )
+        }
+	
+	class App extends React.Component{
+		 constructor(props){
+                super(props)
+                this.state={
+                    visible:false
+                }
+            }
+		 render(){
+		 	return(
+		 		<Row gutter={20}>
+                        <Col span={3}>
+                            <div style={{backgroundColor:'red'}}>title</div>
+                            <button onClick={()=>{this.setState({visible:true})}}>打开dialog</button>
+                        </Col>
+                        <Col span={7}>
+
+                            <Select>
+                                <Option value="jack">jack</Option>
+                                <Option value='lucy'>lucy</Option>
+                                <Option disabled value="disabled">disabled</Option>
+                            </Select>
+                        </Col>
+                        <Col span={2}>
+                            <Dialog 
+                                visible={this.state.visible}
+                                title="确认删除!" 
+                                isShowCancel={true} 
+                                onConfirm={()=>{console.log('数据已删除');this.setState({visible:false})}}>
+                                是否删除数据?
+                            </Dialog>
+                        </Col>
+                    </Row>
+		 	)
+		 }
+	}
+	ReactDOM.render(<App/>,document.getElementById('app'))
+	</script>
+	
+</html>
