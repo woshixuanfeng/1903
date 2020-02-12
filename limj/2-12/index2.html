@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+
+		</div>
+	</body>
+	<script type="text/babel">
+		
+		class App extends React.Component{
+		    constructor(props){
+		        super(props);
+		        this.state={
+					type:false
+		        }
+				this.getRef = this.getRef.bind(this);
+				this.dowmMove = this.dowmMove.bind(this);
+				this.mousUp = this.mousUp.bind(this);
+				this.mousEnter = this.mousEnter.bind(this);
+				this.mousLe = this.mousLe.bind(this);
+				this.aciv=null;
+		    }
+			getRef(el){
+				this.aciv=el
+			}
+			dowmMove(ev){
+				this.aciv.style.transition='0s'
+				if(this.state.type==true){
+					var xx=document.documentElement.clientWidth-100;
+					var yy=document.documentElement.clientHeight-100;
+					var ox=ev.clientX<=50?0:ev.clientX-50;
+					var oy=ev.clientY<=50?0:ev.clientY-50;
+					if(ox>=xx){
+						ox=xx
+					}
+					if(oy>=yy){
+						oy=yy
+					}
+					this.aciv.style.left=ox+'px'
+					this.aciv.style.top=oy+'px'
+				}
+			}
+			mousUp(ev){
+				this.setState({type:false})
+			}
+			mousEnter(ev){
+				this.aciv.style.transition='.4s'
+				this.aciv.style.left=this.aciv.offsetLeft<0?this.aciv.offsetLeft+50+'px':this.aciv.offsetLeft+'px'
+				this.aciv.style.transform='rotate(0deg)'
+			}
+			mousLe(){
+					this.aciv.style.transition='.4s'
+					this.aciv.style.left=this.aciv.offsetLeft==0?this.aciv.offsetLeft-50+'px':this.aciv.offsetLeft+'px'
+					this.aciv.style.transform=this.aciv.offsetLeft<0?'rotate(45deg)':'rotate(0deg)'
+			}
+		    render(){
+		        return(
+					<div onMouseLeave={this.mousLe} onMouseEnter={this.mousEnter} onMouseMove={this.dowmMove} onMouseDown={()=>{this.setState({type:true})}} onMouseUp={this.mousUp} ref={this.getRef} style={{width:'100px',height:'100px',position: 'absolute',borderRadius:'50%',backgroundImage:'url(https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4135477902,3355939884&fm=26&gp=0.jpg)'}}></div>
+		        )
+		    }
+		}
+		ReactDOM.render(<App/>,document.getElementById('app'))
+	</script>
+</html>

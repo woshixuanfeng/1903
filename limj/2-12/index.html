@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			#app{
+				height: 100%;
+			}
+			.box{
+				background-color: #CDCDCD;
+				height: 100%;
+			}
+			.head{
+				height: 50px;
+				background-color: #333;
+			}
+			.head-box{
+				width: 600px;
+				height: 100%;
+				margin: 0 auto;
+			}
+			.cen{
+				width: 600px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+		</div>
+	</body>
+	<script type="text/babel">
+		
+			class Head extends React.Component{
+			    constructor(props){
+			        super(props);
+			        this.state={
+						val:''
+			        }
+					this.handlerChange = this.handlerChange.bind(this)
+					this.oncl = this.oncl.bind(this);
+			    }
+				 handlerChange(ev) {
+				                this.setState({
+				                    [ev.target.name]:  ev.target.value
+				                })
+				            }
+				oncl(ev){
+					if(ev.keyCode==13){
+						this.props.onChange(this.state.val)
+						this.setState({val:''})
+					}
+				}
+			    render(){
+			        return(
+						<div className="head-box">
+							<div style={{float:'left',width:'30%',fontSize:'30px',color:'#fff',lineHeight:'50px'}}>ToDoList</div>
+							<div style={{width:'70%',height:'100%',float:'right'}}>
+								<input onKeyUp={this.oncl} name="val" style={{width:'100%',height:'70%',marginTop:'5px'}} type="text"  value={this.state.val} onChange={this.handlerChange}  />
+							</div>
+						</div>
+			        )
+			    }
+			}
+			class Listb extends React.Component{
+			    constructor(props){
+			        super(props);
+			        this.state={
+						olis:this.props.olis,
+						num:this.props.olis.length
+			        }
+					this.otext = this.otext.bind(this)
+					this.text = this.text.bind(this)
+			    }
+				
+				otext(al){
+					this.props.onChange(al)
+				}
+				
+				text(al,ex){
+					this.props.sas(al,ex)
+				}
+			    render(){
+			        return(
+						<div>
+							<div style={{overflow:'hidden'}}>
+								<span style={{float:'left'}}>{this.props.title}</span>
+								<span style={{float:'right'}}>{this.state.num}</span>
+							</div>
+							<div>
+								<List sas={this.text} onChange={this.otext} olis={this.state.olis}/>
+							</div>
+						</div>
+			        )
+			    }
+			}
+			class List extends React.Component{
+			    constructor(props){
+			        super(props);
+			        this.state={
+						olis:this.props.olis
+			        }
+			    }
+			    render(){
+					var oDiv=this.state.olis.map((time,index)=>{return <div key={index} style={{overflow:'hidden'}}>
+							<input onClick={()=>{this.props.sas(time,index)}} type="checkbox" />
+							<span>{time}</span>
+							<button onClick={()=>{this.props.onChange(index)}}>删除</button>
+						</div>})
+			        return(
+						oDiv
+			        )
+			    }
+			}
+			
+		class App extends React.Component{
+		    constructor(props){
+		        super(props);
+		        this.state={
+					olis:[],
+					tlis:[]
+		        }
+				this.text = this.text.bind(this)
+				this.otext = this.otext.bind(this)
+				this.ttext = this.ttext.bind(this)
+				this.stext = this.stext.bind(this)
+				this.ftext = this.ftext.bind(this)
+		    }
+			text(al){
+				var arr=this.state.olis
+				arr.push(al)
+				this.setState({olis:arr})
+			}
+			otext(al){
+				var arr=this.state.olis
+				arr.splice(al,1)
+				this.setState({olis:arr})
+			}
+			stext(al){
+				var arr=this.state.tlis
+				arr.splice(al,1)
+				this.setState({tlis:arr})
+			}
+			ttext(al,ex){
+				var arr=this.state.olis
+				var arr1=this.state.tlis
+				arr1.push(al)
+				arr.splice(ex,1)
+				this.setState({olis:arr})
+				this.setState({tlis:arr1})
+			}
+			ftext(al,ex){
+				var arr=this.state.olis
+				var arr1=this.state.tlis
+				arr.push(al)
+				arr1.splice(ex,1)
+				this.setState({olis:arr})
+				this.setState({tlis:arr1})
+			}
+		    render(){
+		        return(
+					<div className="box">
+						<div className="head">
+							<Head onChange={this.text} />
+						</div>
+						<div className="cen">
+							<Listb sas={this.ttext} onChange={this.otext} title="正在进行" olis={this.state.olis} />
+							<Listb sas={this.ftext} onChange={this.stext} title="已经完成" olis={this.state.tlis} />
+						</div>
+					</div>
+		        )
+		    }
+		}
+		ReactDOM.render(<App/>,document.getElementById('app'))
+	</script>
+</html>
