@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		.inputnum{
+			width: 150px;
+			height: 40px;
+			position: relative;
+			margin: 40px auto;
+		}
+		input{
+			width: 120px;
+			height: 40px;
+			position: absolute;
+			left: 0;
+			top: 0;
+			padding-left:5px ;
+			font-size: 20px;
+		}
+		.jia{
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 30px;
+			height: 40px;
+		}
+		button{
+			width: 30px;
+			height: 20px;
+			display: block;
+		}
+		button:active{
+		border: 1px blue solid;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		
+	</div>
+	<script type="text/babel">
+		class InputNumber extends React.Component{
+			constructor(props){
+				super(props);
+				this.state={
+					inputVal:this.props.defaultValue
+				}
+			}
+			handleChange(ev){
+				this.setState({
+					inputVal:ev.target.value
+				},function(){
+					this.props.onChange(this.state.inputVal)
+				})
+			}
+			handlejia(){
+				const {inputVal} = this.state
+				if(inputVal<this.props.max){
+					this.setState((prevState,props)=>({
+					inputVal : inputVal+this.props.step 
+					}))
+				}else{
+					this.setState((prevState,props)=>({
+					inputVal : this.props.max
+				}))
+			}
+				this.props.onChange(this.state.inputVal)
+			}
+			handlejian(){
+				const {inputVal} = this.state
+				if(inputVal>this.props.min){
+					this.setState((prevState,props)=>({
+					inputVal : inputVal-this.props.step 
+				}))
+				}else{
+					this.setState((prevState,props)=>({
+					inputVal : this.props.min
+				}))
+				}
+					this.props.onChange(this.state.inputVal)
+			}
+			render(){
+				return(
+					<div className="inputnum">
+						<input type="text" value={this.state.inputVal} onChange={this.handleChange.bind(this)}/>
+						<div className="jia">
+							<button onClick={this.handlejia.bind(this)} style={{cussor:this.props.disabled==true&&'not-allowed'}}>+</button>
+							<button onClick={this.handlejian.bind(this)}>-</button>
+						</div>
+					</div>
+				)
+			}
+		}
+		InputNumber.propTypes = {
+			defaultValue: PropTypes.number,
+			step: PropTypes.number,
+		}
+		function App(){
+			return(
+				<InputNumber defaultValue={0} step={1} max={10} min={0} onChange={(val)=>{console.log(val)}}></InputNumber>
+			)
+		}
+		ReactDOM.render(<App/>,app)
+	</script>
+</body>
+</html>
