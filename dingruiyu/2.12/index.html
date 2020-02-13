@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <style>
+        	*{margin:0;padding:0;}
+        	.yuan {
+                height: 100px;
+                width: 100px;
+                border: solid 1px #ddd;
+                border-radius: 50%;
+                background: deeppink;
+                position: fixed;
+        }
+        </style>
+	</head>
+	<body>
+		<div id="app"></div>
+	</body>
+	<script type="text/babel">
+		class App extends React.Component{
+            constructor() {
+                super();
+                this.state = {elX: 0,elY: 0}
+                this.evX = 0;
+                this.evY = 0;
+            }
+            render() {
+                return <div className="yuan" style={{left:this.state.elX,top:this.state.elY}}onMouseDown = {this.Down.bind(this)}onMouseUp = {this.Up.bind(this)}></div>
+            }
+            Down(e) {
+                this.evX = e.clientX - e.target.offsetLeft;
+                this.evY = e.clientY - e.target.offsetTop;
+                document.onmousemove = this.Move.bind(this)
+            }
+            Move(e) {
+                this.setState({
+                    elX: e.clientX - this.evX,
+                    elY: e.clientY - this.evY
+                })
+            }
+            Up() {
+                document.onmousemove = null
+            }
+        }     
+        ReactDOM.render(<App/>,document.getElementById('app'))
+	</script>
+</html>
