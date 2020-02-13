@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script type="text/babel">
+    class App extends React.Component{
+        constructor(props){
+            super(props)
+            this.state={
+                elx:'',
+                ely:'',
+                evx:'',
+                evy:'',
+                l:'',
+                t:''
+            }
+			this.handleMouseDown =this.handleMouseDown.bind(this);
+			this.handleMouseUp =this.handleMouseUp.bind(this);
+        }
+        handleMouseDown(el) {
+            let div =this.refs.dragPanel;
+			this.setState({
+				elx:el.clientX,
+				evx:el.clientY,
+				l:div.offsetLeft,
+				t:div.offsetTop,
+            })
+            document.onmousemove=(el)=>{
+                var box=document.getElementsByClassName('box')[0]
+                this.setState({
+                    ely:el.clientX,
+                    evy:el.clientY
+                });
+                box.style.left=this.state.ely-this.state.elx+this.state.l+'px'
+                box.style.top=this.state.evy-this.state.evx+this.state.t+'px'
+            }
+        }
+        handleMouseUp(el) {
+			document.onmousemove=null
+		}
+		render() {
+			return (
+				<div className='box' onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onMouseMove={this.handleMouseMove} ref="dragPanel">
+			 </div>		
+			)
+	
+		}
+    }
+	ReactDOM.render(<App/>,document.getElementById('app'));
+</script>
+</html>
