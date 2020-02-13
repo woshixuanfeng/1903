@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .bo {
+        width: 50px;
+        height: 50px;
+        background-color: black;
+        border-radius: 50%;
+    }
+</style>
+
+<body>
+    <div id="app">
+
+    </div>
+</body>
+
+</html>
+<script type="text/babel">
+    class DragImg extends React.Component { constructor(props) { super(props); this.state = { cursor:'pointer', relativeX:0, relatveY:0, isDragging:false         }; this.handleMouseEnter =this.handleMouseEnter.bind(this); this.handleMouseLeave =this.handleMouseLeave.bind(this);
+    this.handleMouseDown =this.handleMouseDown.bind(this); this.handleMouseUp =this.handleMouseUp.bind(this); this.handleMouseMove =this.handleMouseMove.bind(this); } componentDidMount() { let node =this.refs.dragPanel; node.style.left ='50px'; node.style.top
+    ='50px'; } handleMouseEnter(e) { this.setState({ cursor:'cursor'         }) } handleMouseLeave(e) { this.setState({ isDragging:false         }) } handleMouseDown(e) { this.setState({ isDragging:true }) } handleMouseUp(e) { console.log(this.state.isDragging);
+    this.setState({ relativeX:0, relativeY:0, isDragging:false }) } handleMouseMove(e) { let node =this.refs.dragPanel; this.setState({ cursor:'move', relativeX: e.clientX -node.offsetLeft, relativeY: e.clientY -node.offsetTop, }); if (this.state.isDragging)
+    { node.style.left = e.pageX -this.state.relativeX +'px'; node.style.top = e.pageY -this.state.relativeY +'px'; } } render() { return (
+    <div className='bo' onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onMouseMove={this.handleMouseMove} ref="dragPanel" style={{ 'cursor':this.state.cursor}}>
+    </div>
+    ) } } ReactDOM.render(
+
+    <DragImg/>,document.getElementById('app'));
+</script>
