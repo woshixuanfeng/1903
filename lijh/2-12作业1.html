@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .ball {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background-image: url(http://img3.imgtn.bdimg.com/it/u=1521427633,417941480&fm=11&gp=0.jpg);
+        border-radius: 50%;
+        background-size: cover;
+        background-color: #ccc;
+    }
+</style>
+
+<body>
+    <div id="app">
+
+    </div>
+</body>
+
+</html>
+<script type="text/babel">
+    class Ball extends React.Component{
+        constructor(props){
+            super(props);
+            this.ball=null;
+        }
+        componentDidMount(){
+            var maxW=document.documentElement.clientWidth - this.ball.offsetWidth;
+            var maxH=document.documentElement.clientHeight - this.ball.offsetHeight;
+            this.ball.onmousedown=(ev)=>{
+                var baL=this.ball.offsetLeft;
+                var baT=this.ball.offsetTop;
+                var evL=ev.clientX;
+                var evT=ev.clientY;
+                document.onmousemove=(ev)=>{
+                    var newL=baL + ev.clientX - evL;
+                    var newT=baT + ev.clientY - evT;
+                    if(this.props.isSlider){
+                        document.body.style.overflow="hidden"
+                        newL=newL<0?0:newL;
+                        newT=newT<0?0:newT;
+                        newL=newL>maxW?document.documentElement.clientWidth - this.ball.offsetWidth:newL;
+                        newT=newT>maxH?document.documentElement.clientHeight - this.ball.offsetHeight:newT;
+                    }
+
+                    this.ball.style.left = newL +'px'
+					this.ball.style.top  = newT +'px'
+                }
+            }
+            document.onmouseup=()=>{
+                console.log(maxH);
+                console.log(this.ball.offsetTop);
+                
+                
+                if(this.props.isSlider){
+                    if(this.ball.offsetLeft<=0){
+                        this.ball.style.left="-50px";
+                        document.onmousemove=null;
+                        return;
+                    }
+                    if(this.ball.offsetTop<=0){
+                        this.ball.style.top="-50px"
+                        document.onmousemove=null;
+                        return;
+                    }
+                    if(this.ball.offsetLeft>=maxW-1){
+                        this.ball.style.left=maxW+50+"px"
+                        document.onmousemove=null;
+                        return;
+                    }
+                    if(this.ball.offsetTop>=maxH-1){
+                        this.ball.style.top=maxH+50+"px"
+                        document.onmousemove=null;
+                        return;
+                    }
+                    document.onmousemove=null;
+                }
+                document.onmousemove=null;
+            }
+        }
+        render(){
+			return (
+				<div className="ball" ref={(el)=>{this.ball=el}}></div>
+			)
+		}
+    }
+	ReactDOM.render(<Ball isSlider={true}/>,document.getElementById('app'));
+</script>
