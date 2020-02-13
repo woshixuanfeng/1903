@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        .box{
+            height: 80px;
+            width: 80px;
+            border: solid 1px;
+            border-radius: 50%;
+            background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581528676222&di=186d826332028d94e54473cff68ac729&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fwh%3D450%2C600%2Fsign%3D826af381dab44aed591bb6e0862cab37%2F738b4710b912c8fcc7bc0606fc039245d78821a9.jpg');
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    
+    <script type="text/babel">
+        class App extends React.Component{
+            constructor() {
+                super()
+                this.state = {
+                    needX: 0,
+                    needY: 0
+                }
+                this.disX = 0;
+                this.disY = 0;
+            }
+            render() {
+                return <div className="box" style={{left:this.state.needX,top:this.state.needY}}
+                    onMouseDown = {this.fnDown.bind(this)}
+                    onMouseUp = {this.fnUp.bind(this)}
+                ></div>
+            }
+            fnDown(e) {
+                this.disX = e.clientX - e.target.offsetLeft;
+                this.disY = e.clientY - e.target.offsetTop;
+                document.onmousemove = this.fnMove.bind(this)
+            }
+            fnMove(e) {
+                this.setState({
+                    needX: e.clientX - this.disX,
+                    needY: e.clientY - this.disY
+                })
+            }
+            fnUp() {
+                document.onmousemove = null
+            }
+        }     
+        ReactDOM.render(<App/>,document.getElementById('app'))
+    </script>
+</body>
+</html>
