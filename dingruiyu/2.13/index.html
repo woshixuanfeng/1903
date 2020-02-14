@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+        <style>
+        	*{margin:0;padding:0;}
+        	.ipu{
+        		margin-left: 50%;
+        		margin-top:10%;
+        	}
+        	.ipu input{
+        		width: 100px;
+        		height: 20px;
+        	}
+        </style>
+	</head>
+	<body>
+		<div id="app"></div>
+	</body>
+	<script type="text/babel">
+		class App extends React.Component{
+        constructor(props) {
+            super(props);
+            this.state = {
+                a: ''
+            }
+            this.handlerChange = this.handlerChange.bind(this);   
+        }
+        handlerChange(ev) {
+            this.setState({
+                a: ev.target.value
+            })
+        }
+        handlerClick(val){
+            if(this.props.disabled!=false){
+                this.props.onChange(val)
+            }
+        }
+        render() {
+            return (
+                <div className="ipu">
+                    <input type="number" value={this.state.a||this.props.defaultValue} onChange={this.handlerChange} step={1} min={-10} max={20} style={{cursor:this.props.disabled==false&&''}}/>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<App defaultValue={0} disabled={true}/>,document.getElementById('app'))
+	</script>
+</html>
