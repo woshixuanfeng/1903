@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script type="text/babel">
+    class InputNumber extends React.Component{
+        constructor(props) {
+            super(props);
+            this.state = {
+                num: '5'
+            }
+            this.handlerChange = this.handlerChange.bind(this);
+        }
+        handlerChange(ev) {
+            this.setState({
+                num: ev.target.value
+            })
+        }
+        handlerClick(val){
+            if(this.props.disabled!=false){
+                this.props.onChange(val)
+            }
+        }
+        render() {
+            return (
+                <div>
+                    <label>
+                        <input type="number" value={this.state.num} onChange={this.handlerChange} step={0.1} min={0} max={20} style={{cursor:this.props.disabled==false&&'not-allowed'}}/>
+                    </label>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<InputNumber disabled={true}/>,document.getElementById('app'))
+</script>
+</html>
